@@ -1,0 +1,718 @@
+/* ==============================================
+   BASE STYLES - The Professional Facade
+   ============================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #fafafa;
+  color: #1a1a1a;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ==============================================
+   THE CURTAIN - Dramatic Reveal
+   ============================================== */
+
+.curtain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.curtain.opening .curtain-left {
+  transform: translateX(-100%);
+}
+
+.curtain.opening .curtain-right {
+  transform: translateX(100%);
+}
+
+.curtain.opening .curtain-content {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.curtain.hidden {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.curtain-left,
+.curtain-right {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.curtain-left {
+  left: 0;
+}
+
+.curtain-right {
+  right: 0;
+}
+
+.curtain-content {
+  position: relative;
+  z-index: 10;
+  padding: 40px;
+  text-align: center;
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.curtain-subtitle {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.curtain-title {
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.curtain-title-sub {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-weight: 600;
+  margin-bottom: 24px;
+  opacity: 0.9;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.curtain-description {
+  font-size: 1.1rem;
+  opacity: 0.7;
+  margin-bottom: 48px;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.curtain-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.8s ease-out 1s both, pulse-glow 2s ease-in-out 2s infinite;
+}
+
+.curtain-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 40px rgba(255,255,255,0.3);
+}
+
+.curtain-button-ghost {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255,255,255,0.4);
+  }
+}
+
+/* ==============================================
+   MAIN CONTENT (behind curtain)
+   ============================================== */
+
+.main-content {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.8s;
+}
+
+.main-content.revealed {
+  opacity: 1;
+}
+
+/* ==============================================
+   SPLIT LAYOUT
+   ============================================== */
+
+.split-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left Panel: Countdown + Food Slideshow */
+.left-panel {
+  width: 45%;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.left-panel .countdown-section {
+  background: transparent;
+  padding: 24px 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.left-panel .section-title {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Food Slideshow - FAST FOOD VIBES */
+.food-slideshow {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255,204,0,0.8) 0%, transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(255,107,53,0.8) 0%, transparent 35%),
+    radial-gradient(circle at 60% 70%, rgba(255,204,0,0.5) 0%, transparent 25%),
+    linear-gradient(135deg, #c41e3a 0%, #e31837 50%, #ff6b35 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Right Panel: Leaderboard + Shame */
+.right-panel {
+  width: 55%;
+  background: #fafafa;
+  overflow-y: auto;
+}
+
+/* Fun background pattern */
+.food-slideshow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.1) 2px, transparent 2px);
+  background-size: 30px 30px;
+  pointer-events: none;
+}
+
+.photo-stack {
+  position: relative;
+  width: 85%;
+  height: 85%;
+  max-width: 500px;
+  max-height: 500px;
+  z-index: 1;
+}
+
+.stacked-photo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: white;
+  padding: 8px;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.1),
+    0 15px 50px rgba(0,0,0,0.4);
+  border-radius: 6px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.stacked-photo.visible {
+  opacity: 1;
+}
+
+.stacked-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* ==============================================
+   COUNTDOWN
+   ============================================== */
+
+.countdown-section {
+  padding: 30px 20px;
+  text-align: center;
+  background: white;
+}
+
+.section-title {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  border: 3px solid #222;
+  box-shadow: 4px 4px 0 #222;
+  min-width: 80px;
+}
+
+.countdown-item:nth-child(1) {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  transform: rotate(-2deg);
+}
+
+.countdown-item:nth-child(2) {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  transform: rotate(1deg);
+}
+
+.countdown-item:nth-child(3) {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  transform: rotate(-1deg);
+}
+
+.countdown-item:nth-child(4) {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  transform: rotate(2deg);
+}
+
+.countdown-value {
+  font-family: 'Bangers', cursive;
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: white;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  line-height: 1;
+}
+
+.countdown-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}
+
+/* Countdown urgency states */
+.countdown.urgent .countdown-item {
+  animation: wiggle 0.3s ease infinite;
+}
+
+.countdown.critical .countdown-item {
+  animation: shake 0.15s ease infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* ==============================================
+   LEADERBOARD - THE FUN ZONE
+   ============================================== */
+
+.leaderboard-section {
+  padding: 40px 24px;
+  background: linear-gradient(180deg, #fff9e6 0%, #fff 50%);
+}
+
+.leaderboard {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.leaderboard .loading {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  background: white;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  border: 3px solid #222;
+  box-shadow: 4px 4px 0 #222;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.leaderboard-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    currentColor 10px,
+    currentColor 11px
+  );
+  pointer-events: none;
+}
+
+.leaderboard-item:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #222;
+}
+
+.leaderboard-item:nth-child(odd) {
+  transform: rotate(-0.5deg);
+}
+
+.leaderboard-item:nth-child(even) {
+  transform: rotate(0.5deg);
+}
+
+.leaderboard-item:nth-child(odd):hover {
+  transform: rotate(-0.5deg) translate(-2px, -2px);
+}
+
+.leaderboard-item:nth-child(even):hover {
+  transform: rotate(0.5deg) translate(-2px, -2px);
+}
+
+/* Top 3 special styles */
+.leaderboard-item.rank-1 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffec80 50%, #ffd700 100%);
+  border-color: #b8860b;
+  box-shadow: 4px 4px 0 #b8860b;
+  transform: rotate(-1deg) scale(1.02);
+}
+
+.leaderboard-item.rank-2 {
+  background: linear-gradient(135deg, #e8e8e8 0%, #fff 50%, #c0c0c0 100%);
+  border-color: #888;
+  box-shadow: 4px 4px 0 #888;
+}
+
+.leaderboard-item.rank-3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #daa06d 50%, #cd7f32 100%);
+  border-color: #8b4513;
+  box-shadow: 4px 4px 0 #8b4513;
+}
+
+.leaderboard-rank {
+  font-size: 2rem;
+  font-weight: 800;
+  width: 55px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.leaderboard-name {
+  flex: 1;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-left: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.leaderboard-movement {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-left: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.movement-up {
+  color: #22c55e;
+  animation: bounce-up 0.6s ease infinite;
+}
+
+.movement-down {
+  color: #ef4444;
+  animation: bounce-down 0.6s ease infinite;
+}
+
+.movement-same { color: #9ca3af; }
+
+@keyframes bounce-up {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+
+/* ==============================================
+   CHEAT MEAL CHAMPIONS
+   ============================================== */
+
+.shame-section {
+  padding: 40px 24px;
+  background: linear-gradient(180deg, #fff5f5 0%, #ffe0e0 100%);
+  border-top: 3px dashed #e74c3c;
+}
+
+.shame-title {
+  color: #c0392b !important;
+  font-size: 1.8rem !important;
+  text-align: center;
+}
+
+.shame-subtitle {
+  text-align: center;
+  color: #e74c3c;
+  font-style: italic;
+  margin-bottom: 32px;
+  font-size: 1rem;
+}
+
+.shame-list {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.shame-item {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  background: white;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 2px dashed #e74c3c;
+  animation: shame-wiggle 0.5s ease-in-out infinite;
+}
+
+.shame-item:nth-child(odd) {
+  animation-delay: 0.25s;
+}
+
+@keyframes shame-wiggle {
+  0%, 100% { transform: rotate(-0.5deg); }
+  50% { transform: rotate(0.5deg); }
+}
+
+.shame-rank {
+  font-size: 1.5rem;
+  margin-right: 16px;
+}
+
+.shame-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #c0392b;
+}
+
+/* Empty state - everyone is doing well! */
+.shame-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border-radius: 16px;
+  border: 3px solid #28a745;
+  box-shadow: 4px 4px 0 #1e7e34;
+  animation: celebrate 0.5s ease-out;
+}
+
+@keyframes celebrate {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.shame-empty-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.shame-empty-headline {
+  font-family: 'Bangers', cursive;
+  font-size: 1.8rem;
+  color: #155724;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.shame-empty-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #28a745;
+}
+
+/* ==============================================
+   FOOTER
+   ============================================== */
+
+.footer {
+  padding: 40px 20px;
+  text-align: center;
+  background: #1a1a2e;
+  color: white;
+}
+
+/* ==============================================
+   RESPONSIVE
+   ============================================== */
+
+@media (max-width: 900px) {
+  .split-layout {
+    flex-direction: column;
+  }
+
+  .left-panel {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .left-panel .countdown-section {
+    padding: 20px 16px;
+  }
+
+  .food-slideshow {
+    width: 100%;
+    height: 45vh;
+    min-height: 280px;
+  }
+
+  .photo-stack {
+    width: 80%;
+    height: 80%;
+    max-width: 320px;
+    max-height: 320px;
+  }
+
+  .right-panel {
+    width: 100%;
+  }
+
+  .countdown-item {
+    min-width: 60px;
+    padding: 10px 12px;
+  }
+
+  .countdown-value {
+    font-size: 1.8rem;
+  }
+
+  .countdown-label {
+    font-size: 0.55rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+
+  .leaderboard-item {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+
+  .leaderboard-rank {
+    font-size: 1.2rem;
+    width: 40px;
+  }
+
+  .leaderboard-name {
+    font-size: 1rem;
+  }
+
+  .shame-section {
+    padding: 40px 16px;
+  }
+
+  .shame-title {
+    font-size: 1.4rem !important;
+  }
+}

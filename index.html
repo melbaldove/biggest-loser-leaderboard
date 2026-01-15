@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHP 30K Weight Loss Challenge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&family=Bangers&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- THE CURTAIN - Dramatic Professional Facade -->
+  <div class="curtain" id="curtain">
+    <div class="curtain-left"></div>
+    <div class="curtain-right"></div>
+    <div class="curtain-content">
+      <p class="curtain-subtitle">The Ultimate Challenge</p>
+      <h1 class="curtain-title">₱30,000</h1>
+      <h2 class="curtain-title-sub">Weight Loss Challenge</h2>
+      <p class="curtain-description">9 contestants. 3 months. One winner takes all.</p>
+      <button class="curtain-button" id="curtain-button">
+        <span>View Leaderboard</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- The Real Content (hidden behind curtain) -->
+  <div class="main-content" id="main-content">
+
+  <!-- Main Split Layout -->
+  <div class="split-layout">
+
+    <!-- Left: Countdown + Food Slideshow -->
+    <div class="left-panel">
+      <!-- Countdown Timer -->
+      <div class="countdown-section">
+        <h2 class="section-title">Time Remaining</h2>
+        <div class="countdown" id="countdown">
+          <div class="countdown-item">
+            <span class="countdown-value" id="days">--</span>
+            <span class="countdown-label">Days</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-value" id="hours">--</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-value" id="minutes">--</span>
+            <span class="countdown-label">Minutes</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-value" id="seconds">--</span>
+            <span class="countdown-label">Seconds</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Food Slideshow -->
+      <div class="food-slideshow" id="food-slideshow">
+        <div class="photo-stack" id="photo-stack">
+          <!-- Photos will be stacked here by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Leaderboard + Wall of Shame -->
+    <div class="right-panel">
+      <!-- Leaderboard -->
+      <div class="leaderboard-section">
+        <h2 class="section-title">Current Standings</h2>
+        <div class="leaderboard" id="leaderboard">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Cheat Meal Champions (Wall of Shame) -->
+      <div class="shame-section" id="shame-section">
+        <h2 class="section-title shame-title">🍟 Cheat Meal Champions 🍟</h2>
+        <p class="shame-subtitle">Currently winning at eating</p>
+        <div class="shame-list" id="shame-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>May the best loser win 💪</p>
+  </footer>
+
+  </div><!-- end main-content -->
+
+  <script src="app.js"></script>
+</body>
+</html>
