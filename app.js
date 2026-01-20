@@ -116,8 +116,9 @@ async function fetchConfigData() {
 // ==============================================
 
 function getMovement(currentRank, previousRank) {
-  if (currentRank < previousRank) return { symbol: '↑', class: 'movement-up' };
-  if (currentRank > previousRank) return { symbol: '↓', class: 'movement-down' };
+  const diff = previousRank - currentRank;
+  if (diff > 0) return { symbol: `↑${diff}`, class: 'movement-up' };
+  if (diff < 0) return { symbol: `↓${Math.abs(diff)}`, class: 'movement-down' };
   return { symbol: '–', class: 'movement-same' };
 }
 
