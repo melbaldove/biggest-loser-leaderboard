@@ -11,7 +11,7 @@ const SHEETS_CONFIG = {
 
 // Build CSV export URLs with CORS proxy
 const SHEETS_BASE_URL = `https://docs.google.com/spreadsheets/d/${SHEETS_CONFIG.spreadsheetId}/export?format=csv`;
-const CORS_PROXY = 'https://corsproxy.io/?';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
 const CACHE_BUST = `&_=${Date.now()}`;
 const LEADERBOARD_CSV_URL = CORS_PROXY + encodeURIComponent(`${SHEETS_BASE_URL}&gid=${SHEETS_CONFIG.leaderboardGid}${CACHE_BUST}`);
