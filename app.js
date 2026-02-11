@@ -148,8 +148,8 @@ function renderLeaderboard() {
     return;
   }
 
-  // Split into main leaderboard and "Cheat Meal Champions" based on Shamed column
-  const leaders = CONTESTANTS.filter(c => !c.shamed);
+  // All contestants appear in leaderboard; shamed ones also appear in wall of shame
+  const leaders = CONTESTANTS;
   const shamed = CONTESTANTS.filter(c => c.shamed);
 
   // Render main leaderboard
