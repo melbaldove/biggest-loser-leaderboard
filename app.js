@@ -220,11 +220,14 @@ function renderLeaderboard() {
 }
 
 // ==============================================
-// RANK HISTORY CHART
+// RANK HISTORY GRID
 // ==============================================
 
 function renderChart() {
   if (HISTORY.length === 0) return;
+
+  const container = document.getElementById('rank-grid');
+  if (!container) return;
 
   // (1) Determine how many weeks have data
   const maxWeek = HISTORY.reduce((max, h) => {
@@ -234,57 +237,42 @@ function renderChart() {
 
   if (maxWeek === 0) return;
 
-  const labels = Array.from({ length: maxWeek }, (_, i) => `Wk${i + 1}`);
-
-  // (2) Build datasets — one line per contestant
-  const datasets = HISTORY.map((contestant, i) => ({
-    label: contestant.codename,
-    data: contestant.ranks.slice(0, maxWeek),
-    borderColor: CHART_COLORS[i % CHART_COLORS.length],
-    backgroundColor: CHART_COLORS[i % CHART_COLORS.length],
-    tension: 0.3,
-    pointRadius: 5,
-    pointHoverRadius: 8,
-    borderWidth: 3,
-    spanGaps: false,
-  }));
-
-  // (3) Render Chart.js line chart
-  const ctx = document.getElementById('rank-chart').getContext('2d');
-  new Chart(ctx, {
-    type: 'line',
-    data: { labels, datasets },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      scales: {
-        y: {
-          reverse: true,
-          min: 1,
-          max: HISTORY.length,
-          ticks: {
-            stepSize: 1,
-            callback: (val) => `#${val}`,
-          },
-          title: { display: true, text: 'Rank', font: { weight: 'bold' } },
-        },
-        x: {
-          title: { display: true, text: 'Week', font: { weight: 'bold' } },
-        },
-      },
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { usePointStyle: true, padding: 16 },
-        },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => `${ctx.dataset.label}: Rank #${ctx.parsed.y}`,
-          },
-        },
-      },
-    },
+  // (2) Assign a consistent color to each contestant
+  const colorMap = {};
+  HISTORY.forEach((h, i) => {
+    colorMap[h.codename] = CHART_COLORS[i % CHART_COLORS.length];
   });
+
+  // (3) Build grid using DOM methods
+  const inner = document.createElement('div');
+  inner.className = 'rank-grid-inner';
+
+  for (let w = 0; w < maxWeek; w++) {
+    const weekEntries = HISTORY
+      .filter(h => h.ranks[w] !== null)
+      .map(h => ({ codename: h.codename, rank: h.ranks[w] }))
+      .sort((a, b) => a.rank - b.rank);
+
+    const col = document.createElement('div');
+    col.className = 'rank-grid-col';
+
+    const header = document.createElement('div');
+    header.className = 'rank-grid-header';
+    header.textContent = `Wk${w + 1}`;
+    col.appendChild(header);
+
+    weekEntries.forEach(entry => {
+      const cell = document.createElement('div');
+      cell.className = 'rank-grid-cell';
+      cell.style.background = colorMap[entry.codename];
+      cell.textContent = entry.codename;
+      col.appendChild(cell);
+    });
+
+    inner.appendChild(col);
+  }
+
+  container.replaceChildren(inner);
 }
 
 // ==============================================

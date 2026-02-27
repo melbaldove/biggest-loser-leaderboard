@@ -630,7 +630,7 @@ body {
 }
 
 /* ==============================================
-   RANK HISTORY CHART
+   RANK HISTORY GRID
    ============================================== */
 
 .chart-section {
@@ -647,6 +647,43 @@ body {
   border: 3px solid #222;
   box-shadow: 4px 4px 0 #222;
   padding: 24px;
+  overflow-x: auto;
+}
+
+.rank-grid-inner {
+  display: flex;
+  gap: 8px;
+  min-width: min-content;
+}
+
+.rank-grid-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 100px;
+}
+
+.rank-grid-header {
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 8px 4px;
+  letter-spacing: 1px;
+  color: #333;
+}
+
+.rank-grid-cell {
+  padding: 10px 8px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid rgba(0,0,0,0.15);
 }
 
 /* ==============================================
@@ -743,5 +780,14 @@ body {
 
   .chart-container {
     padding: 12px;
+  }
+
+  .rank-grid-col {
+    min-width: 80px;
+  }
+
+  .rank-grid-cell {
+    font-size: 0.65rem;
+    padding: 8px 4px;
   }
 }
