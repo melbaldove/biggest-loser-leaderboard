@@ -640,7 +640,7 @@ body {
 }
 
 .chart-container {
-  max-width: 900px;
+  max-width: none;
   margin: 0 auto;
   background: white;
   border-radius: 16px;
@@ -660,8 +660,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  flex: none;
-  width: auto;
+  flex: 1;
+  min-width: 0;
 }
 
 .rank-grid-header {
@@ -674,8 +674,7 @@ body {
 }
 
 .rank-grid-labels {
-  flex: 0;
-  min-width: auto !important;
+  flex: 0 0 auto;
 }
 
 .rank-grid-label {
