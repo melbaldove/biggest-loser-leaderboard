@@ -679,6 +679,7 @@ body {
 
 .rank-grid-label {
   padding: 10px 8px;
+  border: 3px solid transparent;
   font-family: 'Bangers', cursive;
   font-size: 1rem;
   color: #555;
