@@ -247,6 +247,21 @@ function renderChart() {
   const inner = document.createElement('div');
   inner.className = 'rank-grid-inner';
 
+  // Rank labels column
+  const rankCol = document.createElement('div');
+  rankCol.className = 'rank-grid-col rank-grid-labels';
+  const labelHeader = document.createElement('div');
+  labelHeader.className = 'rank-grid-header';
+  labelHeader.textContent = '';
+  rankCol.appendChild(labelHeader);
+  for (let r = 1; r <= HISTORY.length; r++) {
+    const label = document.createElement('div');
+    label.className = 'rank-grid-label';
+    label.textContent = `#${r}`;
+    rankCol.appendChild(label);
+  }
+  inner.appendChild(rankCol);
+
   for (let w = 0; w < maxWeek; w++) {
     const weekEntries = HISTORY
       .filter(h => h.ranks[w] !== null)

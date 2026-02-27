@@ -673,6 +673,22 @@ body {
   color: #333;
 }
 
+.rank-grid-labels {
+  flex: 0;
+  min-width: auto !important;
+}
+
+.rank-grid-label {
+  padding: 10px 8px;
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  color: #555;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .rank-grid-cell {
   padding: 10px 8px;
   border-radius: 10px;
