@@ -630,6 +630,26 @@ body {
 }
 
 /* ==============================================
+   RANK HISTORY CHART
+   ============================================== */
+
+.chart-section {
+  padding: 40px 24px;
+  background: linear-gradient(180deg, #f0f4ff 0%, #fff 100%);
+  border-top: 3px solid #222;
+}
+
+.chart-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 3px solid #222;
+  box-shadow: 4px 4px 0 #222;
+  padding: 24px;
+}
+
+/* ==============================================
    FOOTER
    ============================================== */
 
@@ -715,5 +735,13 @@ body {
 
   .shame-title {
     font-size: 1.4rem !important;
+  }
+
+  .chart-section {
+    padding: 24px 16px;
+  }
+
+  .chart-container {
+    padding: 12px;
   }
 }

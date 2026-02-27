@@ -7,6 +7,7 @@ const SHEETS_CONFIG = {
   spreadsheetId: '1htoeLmi-aczeAOJpHjf3hFnT5L26kUaGHukXX6l920g',
   leaderboardGid: '0',
   configGid: '136070622',
+  historyGid: '917061774',
 };
 
 // Build CSV export URLs with CORS proxy
@@ -16,6 +17,7 @@ const CORS_PROXY = 'https://api.codetabs.com/v1/proxy?quest=';
 const CACHE_BUST = `&_=${Date.now()}`;
 const LEADERBOARD_CSV_URL = CORS_PROXY + encodeURIComponent(`${SHEETS_BASE_URL}&gid=${SHEETS_CONFIG.leaderboardGid}${CACHE_BUST}`);
 const CONFIG_CSV_URL = CORS_PROXY + encodeURIComponent(`${SHEETS_BASE_URL}&gid=${SHEETS_CONFIG.configGid}${CACHE_BUST}`);
+const HISTORY_CSV_URL = CORS_PROXY + encodeURIComponent(`${SHEETS_BASE_URL}&gid=${SHEETS_CONFIG.historyGid}${CACHE_BUST}`);
 
 // Runtime config (populated from Google Sheets)
 const CONFIG = {
@@ -25,6 +27,7 @@ const CONFIG = {
 
 // Contestants data (populated from Google Sheets)
 let CONTESTANTS = [];
+let HISTORY = [];
 
 // ==============================================
 // CSV PARSING & DATA FETCHING
@@ -82,6 +85,29 @@ async function fetchLeaderboardData() {
     return CONTESTANTS;
   } catch (error) {
     console.error('Failed to fetch leaderboard:', error);
+    return [];
+  }
+}
+
+async function fetchHistoryData() {
+  try {
+    const response = await fetch(HISTORY_CSV_URL);
+    const csvText = await response.text();
+    const data = parseCSV(csvText);
+
+    HISTORY = data
+      .filter(row => row['Codename'])
+      .map(row => ({
+        codename: row['Codename'],
+        ranks: Array.from({ length: 12 }, (_, i) => {
+          const val = parseInt(row[`Wk${i + 1}`], 10);
+          return isNaN(val) ? null : val;
+        }),
+      }));
+
+    return HISTORY;
+  } catch (error) {
+    console.error('Failed to fetch history:', error);
     return [];
   }
 }
@@ -194,6 +220,74 @@ function renderLeaderboard() {
 }
 
 // ==============================================
+// RANK HISTORY CHART
+// ==============================================
+
+function renderChart() {
+  if (HISTORY.length === 0) return;
+
+  // (1) Determine how many weeks have data
+  const maxWeek = HISTORY.reduce((max, h) => {
+    const lastWeek = h.ranks.reduce((last, r, i) => r !== null ? i + 1 : last, 0);
+    return Math.max(max, lastWeek);
+  }, 0);
+
+  if (maxWeek === 0) return;
+
+  const labels = Array.from({ length: maxWeek }, (_, i) => `Wk${i + 1}`);
+
+  // (2) Build datasets — one line per contestant
+  const datasets = HISTORY.map((contestant, i) => ({
+    label: contestant.codename,
+    data: contestant.ranks.slice(0, maxWeek),
+    borderColor: CHART_COLORS[i % CHART_COLORS.length],
+    backgroundColor: CHART_COLORS[i % CHART_COLORS.length],
+    tension: 0.3,
+    pointRadius: 5,
+    pointHoverRadius: 8,
+    borderWidth: 3,
+    spanGaps: false,
+  }));
+
+  // (3) Render Chart.js line chart
+  const ctx = document.getElementById('rank-chart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        y: {
+          reverse: true,
+          min: 1,
+          max: HISTORY.length,
+          ticks: {
+            stepSize: 1,
+            callback: (val) => `#${val}`,
+          },
+          title: { display: true, text: 'Rank', font: { weight: 'bold' } },
+        },
+        x: {
+          title: { display: true, text: 'Week', font: { weight: 'bold' } },
+        },
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { usePointStyle: true, padding: 16 },
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: Rank #${ctx.parsed.y}`,
+          },
+        },
+      },
+    },
+  });
+}
+
+// ==============================================
 // COUNTDOWN TIMER
 // ==============================================
 
@@ -234,6 +328,11 @@ function updateCountdown() {
 // ==============================================
 // FOOD SLIDESHOW - Stacking Photos
 // ==============================================
+
+const CHART_COLORS = [
+  '#f5576c', '#4facfe', '#43e97b', '#fa709a',
+  '#667eea', '#ffd700', '#ff6b35', '#00f2fe', '#764ba2',
+];
 
 const FOOD_IMAGES = [
   'https://panlasangpinoy.com/wp-content/uploads/2020/11/Pork-sisig-with-calamansi.jpg',
@@ -350,10 +449,12 @@ async function init() {
   await Promise.all([
     fetchConfigData(),
     fetchLeaderboardData(),
+    fetchHistoryData(),
   ]);
 
   // Render with live data
   renderLeaderboard();
+  renderChart();
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
