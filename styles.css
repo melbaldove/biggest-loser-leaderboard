@@ -660,8 +660,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  flex: 1;
-  min-width: 100px;
+  flex: none;
+  width: auto;
 }
 
 .rank-grid-header {
@@ -701,6 +701,7 @@ body {
   background: white;
   border: 3px solid #222;
   box-shadow: 3px 3px 0 #222;
+  white-space: nowrap;
 }
 
 .rank-cell-1 {
@@ -815,10 +816,6 @@ body {
 
   .chart-container {
     padding: 12px;
-  }
-
-  .rank-grid-col {
-    min-width: 80px;
   }
 
   .rank-grid-cell {
