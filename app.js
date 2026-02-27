@@ -237,13 +237,7 @@ function renderChart() {
 
   if (maxWeek === 0) return;
 
-  // (2) Assign a consistent color to each contestant
-  const colorMap = {};
-  HISTORY.forEach((h, i) => {
-    colorMap[h.codename] = CHART_COLORS[i % CHART_COLORS.length];
-  });
-
-  // (3) Build grid using DOM methods
+  // (2) Build grid using DOM methods
   const inner = document.createElement('div');
   inner.className = 'rank-grid-inner';
 
@@ -278,8 +272,7 @@ function renderChart() {
 
     weekEntries.forEach(entry => {
       const cell = document.createElement('div');
-      cell.className = 'rank-grid-cell';
-      cell.style.background = colorMap[entry.codename];
+      cell.className = `rank-grid-cell rank-cell-${Math.min(entry.rank, 4)}`;
       cell.textContent = entry.codename;
       col.appendChild(cell);
     });
@@ -331,11 +324,6 @@ function updateCountdown() {
 // ==============================================
 // FOOD SLIDESHOW - Stacking Photos
 // ==============================================
-
-const CHART_COLORS = [
-  '#f5576c', '#4facfe', '#43e97b', '#fa709a',
-  '#667eea', '#ffd700', '#ff6b35', '#00f2fe', '#764ba2',
-];
 
 const FOOD_IMAGES = [
   'https://panlasangpinoy.com/wp-content/uploads/2020/11/Pork-sisig-with-calamansi.jpg',
