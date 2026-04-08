@@ -536,6 +536,12 @@ body {
   font-style: italic;
   color: #999;
   letter-spacing: 4px;
+  background: linear-gradient(90deg, #999 0%, #ccc 50%, #999 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-text 2s ease-in-out infinite;
 }
 
 .leaderboard-item.reveal-hidden,
@@ -543,12 +549,44 @@ body {
   animation: reveal-pulse 2s ease-in-out infinite;
 }
 
+/* Scrambling state — rapid text cycling */
+.leaderboard-item.reveal-scrambling .leaderboard-name {
+  font-style: normal;
+  color: #1a1a1a;
+  letter-spacing: 0.5px;
+  background: none;
+  -webkit-text-fill-color: unset;
+}
+
+/* Small pop after codename reveal */
+.leaderboard-item.reveal-pop-small {
+  animation: reveal-pop-small 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Big pop after final name reveal */
 .leaderboard-item.reveal-done {
-  animation: reveal-pop 0.4s ease-out;
+  animation: reveal-pop-big 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: box-shadow 1.5s ease-out;
 }
 
 .leaderboard-item.reveal-done .leaderboard-name {
   font-weight: 800;
+}
+
+/* Confetti particles */
+.confetti-particle {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: confetti-fly 1s ease-out forwards;
+}
+
+@keyframes shimmer-text {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 @keyframes reveal-pulse {
@@ -556,10 +594,27 @@ body {
   50% { box-shadow: 4px 4px 12px rgba(34, 34, 34, 0.4); }
 }
 
-@keyframes reveal-pop {
+@keyframes reveal-pop-small {
   0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
+  50% { transform: scale(1.04); }
   100% { transform: scale(1); }
+}
+
+@keyframes reveal-pop-big {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes confetti-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(720deg) scale(0.3);
+  }
 }
 
 /* ==============================================

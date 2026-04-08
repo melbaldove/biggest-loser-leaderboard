@@ -167,22 +167,97 @@ function getRankEmoji(rank) {
 // WEEK 12 REVEAL
 // ==============================================
 
+function scrambleReveal(nameEl, finalText, pool, onComplete) {
+  // (1) Disable clicks during animation
+  const item = nameEl.closest('.leaderboard-item');
+  item.style.pointerEvents = 'none';
+  item.classList.add('reveal-scrambling');
+
+  // (2) Scramble phase — fast cycling through random pool entries
+  const scrambleDuration = 1500;
+  const slowdownDuration = 800;
+  let elapsed = 0;
+  let interval = 60;
+  let timer;
+
+  function tick() {
+    const randomEntry = pool[Math.floor(Math.random() * pool.length)];
+    nameEl.textContent = randomEntry;
+    elapsed += interval;
+
+    if (elapsed < scrambleDuration) {
+      timer = setTimeout(tick, interval);
+    } else if (elapsed < scrambleDuration + slowdownDuration) {
+      // Slowdown phase — decelerate
+      interval = Math.min(interval * 1.5, 400);
+      timer = setTimeout(tick, interval);
+    } else {
+      // Lock in
+      nameEl.textContent = finalText;
+      item.classList.remove('reveal-scrambling');
+      item.style.pointerEvents = '';
+      if (onComplete) onComplete();
+    }
+  }
+
+  timer = setTimeout(tick, interval);
+}
+
+function spawnConfetti(item) {
+  const rect = item.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  const count = 30;
+
+  for (let i = 0; i < count; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'confetti-particle';
+    particle.style.left = `${centerX}px`;
+    particle.style.top = `${centerY}px`;
+    particle.style.backgroundColor = GRID_COLORS[Math.floor(Math.random() * GRID_COLORS.length)];
+
+    // Random direction and distance
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+    const distance = 80 + Math.random() * 120;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance - 40; // bias upward
+    particle.style.setProperty('--dx', `${dx}px`);
+    particle.style.setProperty('--dy', `${dy}px`);
+    particle.style.animationDelay = `${Math.random() * 0.15}s`;
+
+    document.body.appendChild(particle);
+    particle.addEventListener('animationend', () => particle.remove());
+  }
+}
+
 function handleRevealClick(e) {
   const item = e.currentTarget;
   const nameEl = item.querySelector('.leaderboard-name');
 
+  // Build scramble pools from all contestants
+  const codenames = CONTESTANTS.map(c => c.codename);
+  const names = CONTESTANTS.map(c => c.name).filter(Boolean);
+
   if (item.classList.contains('reveal-hidden')) {
-    // Hidden → show codename
-    nameEl.textContent = item.dataset.codename;
-    item.classList.remove('reveal-hidden');
-    item.classList.add('reveal-codename');
+    // Hidden → scramble to codename
+    scrambleReveal(nameEl, item.dataset.codename, codenames, () => {
+      item.classList.remove('reveal-hidden');
+      item.classList.add('reveal-codename', 'reveal-pop-small');
+    });
   } else if (item.classList.contains('reveal-codename')) {
-    // Codename → append real name
-    nameEl.textContent = `${item.dataset.codename} (${item.dataset.name})`;
-    item.classList.remove('reveal-codename');
-    item.classList.add('reveal-done');
-    item.style.cursor = 'default';
-    item.removeEventListener('click', handleRevealClick);
+    // Codename → scramble to real name (appended)
+    const finalText = `${item.dataset.codename} (${item.dataset.name})`;
+    scrambleReveal(nameEl, finalText, names, () => {
+      item.classList.remove('reveal-codename');
+      item.classList.add('reveal-done');
+      item.style.cursor = 'default';
+      item.removeEventListener('click', handleRevealClick);
+      spawnConfetti(item);
+      // Rank-colored glow
+      const glowColor = item.dataset.glow || '#667eea';
+      item.style.boxShadow = `0 0 30px ${glowColor}, 0 0 60px ${glowColor}`;
+      setTimeout(() => { item.style.boxShadow = ''; }, 1500);
+    });
   }
 }
 
@@ -219,7 +294,7 @@ function renderLeaderboard() {
 
     return `
       <div class="leaderboard-item ${itemRankClass} ${revealClass}"
-           ${isFinalWeek ? `data-codename="${contestant.codename}" data-name="${contestant.name}"` : ''}>
+           ${isFinalWeek ? `data-codename="${contestant.codename}" data-name="${contestant.name}" data-glow="${rank === 1 ? '#ffd700' : rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : '#667eea'}"` : ''}>
         <span class="leaderboard-rank ${rankClass}">${getRankEmoji(rank)}</span>
         <span class="leaderboard-name">${displayName}</span>
         <span class="leaderboard-movement ${movement.class}">${movement.symbol}</span>
