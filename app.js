@@ -167,7 +167,7 @@ function getRankEmoji(rank) {
 // WEEK 12 REVEAL
 // ==============================================
 
-function scrambleReveal(nameEl, finalText, pool, onComplete) {
+function scrambleReveal(nameEl, finalText, pool, onComplete, prefix) {
   // (1) Disable clicks during animation
   const item = nameEl.closest('.leaderboard-item');
   item.style.pointerEvents = 'none';
@@ -179,10 +179,11 @@ function scrambleReveal(nameEl, finalText, pool, onComplete) {
   let elapsed = 0;
   let interval = 60;
   let timer;
+  const pre = prefix || '';
 
   function tick() {
     const randomEntry = pool[Math.floor(Math.random() * pool.length)];
-    nameEl.textContent = randomEntry;
+    nameEl.textContent = pre ? `${pre} (${randomEntry})` : randomEntry;
     elapsed += interval;
 
     if (elapsed < scrambleDuration) {
@@ -245,7 +246,7 @@ function handleRevealClick(e) {
       item.classList.add('reveal-codename', 'reveal-pop-small');
     });
   } else if (item.classList.contains('reveal-codename')) {
-    // Codename → scramble to real name (appended)
+    // Codename → scramble to real name (appended), codename stays static
     const finalText = `${item.dataset.codename} (${item.dataset.name})`;
     scrambleReveal(nameEl, finalText, names, () => {
       item.classList.remove('reveal-codename');
@@ -257,7 +258,7 @@ function handleRevealClick(e) {
       const glowColor = item.dataset.glow || '#667eea';
       item.style.boxShadow = `0 0 30px ${glowColor}, 0 0 60px ${glowColor}`;
       setTimeout(() => { item.style.boxShadow = ''; }, 1500);
-    });
+    }, item.dataset.codename);
   }
 }
 
