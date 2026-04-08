@@ -177,8 +177,8 @@ function handleRevealClick(e) {
     item.classList.remove('reveal-hidden');
     item.classList.add('reveal-codename');
   } else if (item.classList.contains('reveal-codename')) {
-    // Codename → show real name
-    nameEl.textContent = item.dataset.name;
+    // Codename → append real name
+    nameEl.textContent = `${item.dataset.codename} (${item.dataset.name})`;
     item.classList.remove('reveal-codename');
     item.classList.add('reveal-done');
     item.style.cursor = 'default';
