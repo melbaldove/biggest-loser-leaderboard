@@ -212,7 +212,7 @@ function renderLeaderboard() {
     const rank = contestant.currentRank;
 
     // Week 12 reveal: rank 1 & 3 start hidden (two clicks), others show codename (one click)
-    const needsTwoClicks = isFinalWeek && (rank === 1 || rank === 3);
+    const needsTwoClicks = isFinalWeek && (rank === 1 || rank === 2 || rank === 3);
     const needsOneClick = isFinalWeek && !needsTwoClicks;
     const revealClass = needsTwoClicks ? 'reveal-hidden' : needsOneClick ? 'reveal-codename' : '';
     const displayName = needsTwoClicks ? '???' : contestant.codename;
