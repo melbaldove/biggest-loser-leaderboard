@@ -524,6 +524,45 @@ body {
 
 
 /* ==============================================
+   WEEK 12 REVEAL
+   ============================================== */
+
+.leaderboard-item.reveal-hidden .leaderboard-name,
+.leaderboard-item.reveal-codename .leaderboard-name {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.leaderboard-item.reveal-hidden .leaderboard-name {
+  font-style: italic;
+  color: #999;
+  letter-spacing: 4px;
+}
+
+.leaderboard-item.reveal-hidden,
+.leaderboard-item.reveal-codename {
+  animation: reveal-pulse 2s ease-in-out infinite;
+}
+
+.leaderboard-item.reveal-done {
+  animation: reveal-pop 0.4s ease-out;
+}
+
+.leaderboard-item.reveal-done .leaderboard-name {
+  font-weight: 800;
+}
+
+@keyframes reveal-pulse {
+  0%, 100% { box-shadow: 4px 4px 0 #222; }
+  50% { box-shadow: 4px 4px 12px rgba(34, 34, 34, 0.4); }
+}
+
+@keyframes reveal-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* ==============================================
    CHEAT MEAL CHAMPIONS
    ============================================== */
 

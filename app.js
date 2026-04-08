@@ -71,11 +71,12 @@ async function fetchLeaderboardData() {
     const csvText = await response.text();
     const data = parseCSV(csvText);
 
-    // Map to expected format (columns: Codename, Current Rank, Previous Rank, Shamed)
+    // Map to expected format (columns: Codename, Current Rank, Previous Rank, Shamed, Name)
     CONTESTANTS = data
       .filter(row => row['Codename'] && row['Current Rank'])
       .map(row => ({
         codename: row['Codename'],
+        name: row['Name'] || '',
         currentRank: parseInt(row['Current Rank'], 10),
         previousRank: parseInt(row['Previous Rank'], 10) || parseInt(row['Current Rank'], 10),
         shamed: row['Shamed'] === 'TRUE',
@@ -163,6 +164,29 @@ function getRankEmoji(rank) {
 }
 
 // ==============================================
+// WEEK 12 REVEAL
+// ==============================================
+
+function handleRevealClick(e) {
+  const item = e.currentTarget;
+  const nameEl = item.querySelector('.leaderboard-name');
+
+  if (item.classList.contains('reveal-hidden')) {
+    // Hidden → show codename
+    nameEl.textContent = item.dataset.codename;
+    item.classList.remove('reveal-hidden');
+    item.classList.add('reveal-codename');
+  } else if (item.classList.contains('reveal-codename')) {
+    // Codename → show real name
+    nameEl.textContent = item.dataset.name;
+    item.classList.remove('reveal-codename');
+    item.classList.add('reveal-done');
+    item.style.cursor = 'default';
+    item.removeEventListener('click', handleRevealClick);
+  }
+}
+
+// ==============================================
 // RENDER LEADERBOARD
 // ==============================================
 
@@ -178,20 +202,38 @@ function renderLeaderboard() {
   const leaders = CONTESTANTS;
   const shamed = CONTESTANTS.filter(c => c.shamed);
 
+  const isFinalWeek = CONFIG.currentWeek === 12;
+
   // Render main leaderboard
   container.innerHTML = leaders.map(contestant => {
     const movement = getMovement(contestant.currentRank, contestant.previousRank);
     const rankClass = getRankClass(contestant.currentRank);
     const itemRankClass = contestant.currentRank <= 3 ? `rank-${contestant.currentRank}` : '';
+    const rank = contestant.currentRank;
+
+    // Week 12 reveal: rank 1 & 3 start hidden (two clicks), others show codename (one click)
+    const needsTwoClicks = isFinalWeek && (rank === 1 || rank === 3);
+    const needsOneClick = isFinalWeek && !needsTwoClicks;
+    const revealClass = needsTwoClicks ? 'reveal-hidden' : needsOneClick ? 'reveal-codename' : '';
+    const displayName = needsTwoClicks ? '???' : contestant.codename;
 
     return `
-      <div class="leaderboard-item ${itemRankClass}">
-        <span class="leaderboard-rank ${rankClass}">${getRankEmoji(contestant.currentRank)}</span>
-        <span class="leaderboard-name">${contestant.codename}</span>
+      <div class="leaderboard-item ${itemRankClass} ${revealClass}"
+           ${isFinalWeek ? `data-codename="${contestant.codename}" data-name="${contestant.name}"` : ''}>
+        <span class="leaderboard-rank ${rankClass}">${getRankEmoji(rank)}</span>
+        <span class="leaderboard-name">${displayName}</span>
         <span class="leaderboard-movement ${movement.class}">${movement.symbol}</span>
       </div>
     `;
   }).join('');
+
+  // Week 12: attach click handlers for progressive reveal
+  if (isFinalWeek) {
+    container.querySelectorAll('.leaderboard-item').forEach(item => {
+      item.style.cursor = 'pointer';
+      item.addEventListener('click', handleRevealClick);
+    });
+  }
 
   // Render Cheat Meal Champions (shamed contestants)
   const shameContainer = document.getElementById('shame-list');
